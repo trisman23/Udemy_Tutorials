@@ -17,3 +17,5 @@ BuildingEscape/Content/StarterContent/Maps/StarterMap_BuiltData.uasset
 #################################
 *.VC.db
 *.suo
+*.VC.opendb
+*.sln
