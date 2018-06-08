@@ -29,21 +29,7 @@ void UOpenDoor::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("No Pressure Plate found  %s"), *GetOwner()->GetName());
 	}
-
-	if (Owner == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("No Owner Found  %s"), *GetOwner()->GetName());
-	}
-}
-
-void UOpenDoor::OpenDoor()
-{	
-	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
-}
-
-void UOpenDoor::CloseDoor()
-{
-	Owner->SetActorRotation(FRotator(0.f, 90.f, 0.f));
+		
 }
 
 
@@ -53,16 +39,13 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// poll the Trigger Volume	
-	if (GetTotalMassOfActorsOnPlate() > 50.f) //TODO Make a parameter for threshold
+	if (GetTotalMassOfActorsOnPlate() > TriggerMass)
 	{
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		OnOpen.Broadcast();
 	}
-
-	// Check if it's time to close the door
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
+	else
 	{
-		CloseDoor();		
+		OnClose.Broadcast();		
 	}
 }
 
